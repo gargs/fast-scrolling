@@ -34,8 +34,10 @@
 @interface ABTableViewCell : UITableViewCell
 {
 	UIView *contentView;
+	UIView *auxView;
 }
 
 - (void)drawContentView:(CGRect)r; // subclasses should implement
+- (void)drawAuxView:(CGRect)r;
 
 @end

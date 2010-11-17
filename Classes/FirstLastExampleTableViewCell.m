@@ -66,12 +66,14 @@ static UIFont *lastTextFont = nil;
 	}
 	
 	[contentView setFrame:b];
+	/*
 	if (deleteSwiped) {
 		[UIView beginAnimations:@"removeWithEffect" context:nil];
 		[UIView setAnimationDuration:1.5f];
 		[contentView setHidden:YES];
 		[UIView commitAnimations];
 	}
+	 */
 	
 	
 	/* THIS MESSES UP THE FRAME OF THE CELL BECAUSE THE DELETE BUTTON DOESNT SHIFT IT JUST SUPERIMPOSES ON THE FRAME
@@ -81,6 +83,19 @@ static UIFont *lastTextFont = nil;
 	 */
 
 	//NSLog(@"b.origin: %f", b.origin.x);
+	
+	if (deleteSwiped) {
+		//Bring the Aux to the front!
+		CGRect auxViewBounds = [auxView bounds];
+		auxViewBounds = [self bounds];
+		auxViewBounds.size.height -= 1;
+		
+		[auxView setBounds:auxViewBounds];
+		
+		[contentView setBounds:CGRectZero];
+	}
+	
+	
     [super layoutSubviews];
 	//deleteSwiped = NO;
 }
@@ -117,6 +132,36 @@ static UIFont *lastTextFont = nil;
 	else {
 		[lastText drawAtPoint:p withFont:lastTextFont];
 	}
+}
+
+- (void)drawAuxView:(CGRect)r
+{
+	//NSLog(@"drawcontentview called");
+	CGContextRef context = UIGraphicsGetCurrentContext();
+	
+	UIColor *backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.0];
+	UIColor *textColor = [UIColor blackColor];
+	
+	if(self.selected)
+	{
+		backgroundColor = [UIColor clearColor];
+		textColor = [UIColor whiteColor];
+	}
+	
+	[backgroundColor set];
+	CGContextFillRect(context, r);
+	
+	CGPoint p;
+	p.x = 42;
+	p.y = 9;
+	
+	[textColor set];
+	CGSize s = [firstText drawAtPoint:p withFont:firstTextFont];
+	
+	p.x += s.width + 6; // space between words
+		NSString *newLastText = @"Hi!";
+		[newLastText drawAtPoint:p withFont:lastTextFont];
+	[auxView setFrame:CGRectZero];
 }
 
 - (void)willTransitionToState:(UITableViewCellStateMask)state {

@@ -37,6 +37,7 @@
 - (void)drawRect:(CGRect)r
 {
 	[(ABTableViewCell *)[self superview] drawContentView:r];
+	[(ABTableViewCell *)[self superview] drawAuxView:r];
 }
 
 @end
@@ -50,7 +51,10 @@
     if(self = [super initWithFrame:frame reuseIdentifier:reuseIdentifier])
 	{
 		contentView = [[ABTableViewCellView alloc] initWithFrame:CGRectZero];
+		auxView = [[ABTableViewCellView alloc] initWithFrame:CGRectZero];
+		
 		contentView.opaque = YES;
+		auxView.opaque = YES;
 		[self addSubview:contentView];
 		[contentView release];
     }
@@ -71,6 +75,10 @@
 - (void)drawContentView:(CGRect)r
 {
 	// subclasses should implement this
+}
+
+- (void)drawAuxView:(CGRect)r {
+	//Implemented by subclass	
 }
 
 @end

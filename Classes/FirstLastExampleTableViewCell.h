@@ -16,8 +16,6 @@
 	
 	BOOL deleteSelected;
 	BOOL deleteSwiped;
-	
-	int frame;
 }
 
 @property (nonatomic, copy) NSString *firstText;
