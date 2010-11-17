@@ -55,49 +55,57 @@ static UIFont *lastTextFont = nil;
 
 - (void)layoutSubviews
 {
-	CGRect b = [self bounds];
-	b.size.height -= 1; // leave room for the separator line
-	b.size.width += 30; // allow extra width to slide for editing
-	//b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
-	b.origin.x -= (self.editing && !deleteSwiped) ? 0 : 30; // start 30px left unless editing
-
-	if (deleteSelected == YES) {
-		b.size.width -= 30;
-	}
+	[super layoutSubviews];
 	
-	[contentView setFrame:b];
-	/*
-	if (deleteSwiped) {
-		[UIView beginAnimations:@"removeWithEffect" context:nil];
-		[UIView setAnimationDuration:1.5f];
-		[contentView setHidden:YES];
-		[UIView commitAnimations];
-	}
-	 */
+	[UIView beginAnimations:nil context:nil];
+	[UIView setAnimationBeginsFromCurrentState:YES];
 	
-	
-	/* THIS MESSES UP THE FRAME OF THE CELL BECAUSE THE DELETE BUTTON DOESNT SHIFT IT JUST SUPERIMPOSES ON THE FRAME
 	if (deleteSwiped == YES) {
-		b.origin.x -= 30;
-	}
-	 */
-
-	//NSLog(@"b.origin: %f", b.origin.x);
-	
-	if (deleteSwiped) {
+		
+		CGRect b = [self bounds];
+		b.size.height -= 1; // leave room for the separator line
+		b.size.width += 30; // allow extra width to slide for editing
+		//b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
+		//b.origin.x -= (self.editing) ? 0 : 30; // start 30px left unless editing
 		//Bring the Aux to the front!
-		CGRect auxViewBounds = [auxView bounds];
-		auxViewBounds = [self bounds];
-		auxViewBounds.size.height -= 1;
+		//CGRect auxViewFrame = [self bounds];
 		
-		[auxView setBounds:auxViewBounds];
+		[auxView setAlpha:1];
+		[auxView setFrame:b];
+		[contentView setAlpha:0];
+		//[contentView setFrame:CGRectMake(-340, b.origin.y, b.size.width, b.size.height)];
 		
-		[contentView setBounds:CGRectZero];
+		//[contentView setFrame:CGRectMake(-300, self.frame.origin.y, self.frame.size.width, self.frame.size.height)];
+		//[auxView setFrame:auxViewFrame];
 	}
-	
-	
-    [super layoutSubviews];
-	//deleteSwiped = NO;
+	else {
+		
+		CGRect b = [self bounds];
+		b.size.height -= 1; // leave room for the separator line
+		b.size.width += 30; // allow extra width to slide for editing
+		//b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
+		b.origin.x -= (self.editing && !deleteSwiped) ? 0 : 30; // start 30px left unless editing
+		
+		if (deleteSelected == YES) {
+			b.size.width -= 30;
+		}
+		
+		[contentView setAlpha:1];
+		[contentView setFrame:b];
+		[auxView setAlpha:0];
+		//[auxView setFrame:CGRectMake(-340, 0, 320, 44)];
+		
+		
+		/* THIS MESSES UP THE FRAME OF THE CELL BECAUSE THE DELETE BUTTON DOESNT SHIFT IT JUST SUPERIMPOSES ON THE FRAME
+		 if (deleteSwiped == YES) {
+		 b.origin.x -= 30;
+		 }
+		 */
+		
+		//NSLog(@"b.origin: %f", b.origin.x);
+	}
+	[UIView commitAnimations];
+	deleteSwiped = NO;
 }
 
 - (void)drawContentView:(CGRect)r
@@ -125,18 +133,12 @@ static UIFont *lastTextFont = nil;
 	CGSize s = [firstText drawAtPoint:p withFont:firstTextFont];
 	
 	p.x += s.width + 6; // space between words
-	if (deleteSwiped == YES) {
-		NSString *newLastText = @"Hi!";
-		[newLastText drawAtPoint:p withFont:lastTextFont];
-	}
-	else {
 		[lastText drawAtPoint:p withFont:lastTextFont];
-	}
 }
 
 - (void)drawAuxView:(CGRect)r
 {
-	//NSLog(@"drawcontentview called");
+	//NSLog(@"drawauxview called");
 	CGContextRef context = UIGraphicsGetCurrentContext();
 	
 	UIColor *backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.0];
@@ -161,16 +163,16 @@ static UIFont *lastTextFont = nil;
 	p.x += s.width + 6; // space between words
 		NSString *newLastText = @"Hi!";
 		[newLastText drawAtPoint:p withFont:lastTextFont];
-	[auxView setFrame:CGRectZero];
+	//[auxView setFrame:CGRectZero];
 }
 
 - (void)willTransitionToState:(UITableViewCellStateMask)state {
-	//NSLog(@"Transitioning to state: %d", state);
+	NSLog(@"Transitioning to state: %d", state);
 	if (state == 3) {
 		CGRect b = [self bounds];
 		b.size.width -= 30;
 		[contentView setFrame:b];
-		[super layoutSubviews];
+		//[super layoutSubviews];
 		deleteSelected = YES;
 	}
 	else {

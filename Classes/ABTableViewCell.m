@@ -55,8 +55,10 @@
 		
 		contentView.opaque = YES;
 		auxView.opaque = YES;
+		[self addSubview:auxView];
 		[self addSubview:contentView];
 		[contentView release];
+		[auxView release];
     }
     return self;
 }
@@ -70,6 +72,7 @@
 {
 	[super setNeedsDisplay];
 	[contentView setNeedsDisplay];
+	[auxView setNeedsDisplay];
 }
 
 - (void)drawContentView:(CGRect)r
