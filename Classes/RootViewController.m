@@ -71,11 +71,7 @@ static NSString *randomWords[] = {
 	FirstLastExampleTableViewCell *cell = (FirstLastExampleTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
 	cell.deleteSwiped = YES;
 	
-	[UIView beginAnimations:@"removeWithEffect" context:nil];
-	[UIView setAnimationDuration:4.0f];
-	cell.lastText = @"Hi";
-	[cell setNeedsDisplay];
-	[UIView commitAnimations];
+	//Create a new cell
 	
 	//cell.lastText = @"Hi";
 	

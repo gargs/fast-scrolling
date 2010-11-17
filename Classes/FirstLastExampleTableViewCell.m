@@ -66,6 +66,13 @@ static UIFont *lastTextFont = nil;
 	}
 	
 	[contentView setFrame:b];
+	if (deleteSwiped) {
+		[UIView beginAnimations:@"removeWithEffect" context:nil];
+		[UIView setAnimationDuration:1.5f];
+		[contentView setHidden:YES];
+		[UIView commitAnimations];
+	}
+	
 	
 	/* THIS MESSES UP THE FRAME OF THE CELL BECAUSE THE DELETE BUTTON DOESNT SHIFT IT JUST SUPERIMPOSES ON THE FRAME
 	if (deleteSwiped == YES) {
