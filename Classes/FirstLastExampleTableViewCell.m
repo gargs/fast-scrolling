@@ -67,6 +67,7 @@ static UIFont *lastTextFont = nil;
 		b.size.width += 30; // allow extra width to slide for editing
 		//b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
 		//b.origin.x -= (self.editing) ? 0 : 30; // start 30px left unless editing
+		b.origin.x -= 30;
 		//Bring the Aux to the front!
 		//CGRect auxViewFrame = [self bounds];
 		

@@ -71,8 +71,8 @@
 - (void)setNeedsDisplay
 {
 	[super setNeedsDisplay];
-	[contentView setNeedsDisplay];
 	[auxView setNeedsDisplay];
+	[contentView setNeedsDisplay];
 }
 
 - (void)drawContentView:(CGRect)r
