@@ -15,9 +15,13 @@
 	NSString *lastText;
 	
 	BOOL deleteSelected;
+	BOOL deleteSwiped;
+	
+	int frame;
 }
 
 @property (nonatomic, copy) NSString *firstText;
 @property (nonatomic, copy) NSString *lastText;
+@property (nonatomic, assign) BOOL deleteSwiped;
 
 @end

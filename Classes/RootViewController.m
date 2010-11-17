@@ -64,6 +64,23 @@ static NSString *randomWords[] = {
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	// This method must exist to enable swipe-to-delete
+	NSLog(@"commiteditingstyle called");
+}
+
+-(void)tableView:(UITableView*)tableView willBeginEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+	FirstLastExampleTableViewCell *cell = (FirstLastExampleTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+	cell.deleteSwiped = YES;
+	
+	[UIView beginAnimations:@"removeWithEffect" context:nil];
+	[UIView setAnimationDuration:4.0f];
+	cell.lastText = @"Hi";
+	[cell setNeedsDisplay];
+	[UIView commitAnimations];
+	
+	//cell.lastText = @"Hi";
+	
+	//[cell setNeedsDisplay];
+	//[cell setNeedsLayout];
 }
 
 @end

@@ -12,6 +12,7 @@
 
 @synthesize firstText;
 @synthesize lastText;
+@synthesize deleteSwiped;
 
 static UIFont *firstTextFont = nil;
 static UIFont *lastTextFont = nil;
@@ -58,17 +59,28 @@ static UIFont *lastTextFont = nil;
 	b.size.height -= 1; // leave room for the separator line
 	b.size.width += 30; // allow extra width to slide for editing
 	//b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
-	b.origin.x -= (self.editing) ? 0 : 30; // start 30px left unless editing
+	b.origin.x -= (self.editing && !deleteSwiped) ? 0 : 30; // start 30px left unless editing
+
 	if (deleteSelected == YES) {
 		b.size.width -= 30;
 	}
-	NSLog(@"b.origin: %f", b.origin.x);
+	
 	[contentView setFrame:b];
+	
+	/* THIS MESSES UP THE FRAME OF THE CELL BECAUSE THE DELETE BUTTON DOESNT SHIFT IT JUST SUPERIMPOSES ON THE FRAME
+	if (deleteSwiped == YES) {
+		b.origin.x -= 30;
+	}
+	 */
+
+	//NSLog(@"b.origin: %f", b.origin.x);
     [super layoutSubviews];
+	//deleteSwiped = NO;
 }
 
 - (void)drawContentView:(CGRect)r
 {
+	//NSLog(@"drawcontentview called");
 	CGContextRef context = UIGraphicsGetCurrentContext();
 
 	UIColor *backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1.0];
@@ -91,7 +103,13 @@ static UIFont *lastTextFont = nil;
 	CGSize s = [firstText drawAtPoint:p withFont:firstTextFont];
 	
 	p.x += s.width + 6; // space between words
-	[lastText drawAtPoint:p withFont:lastTextFont];
+	if (deleteSwiped == YES) {
+		NSString *newLastText = @"Hi!";
+		[newLastText drawAtPoint:p withFont:lastTextFont];
+	}
+	else {
+		[lastText drawAtPoint:p withFont:lastTextFont];
+	}
 }
 
 - (void)willTransitionToState:(UITableViewCellStateMask)state {
@@ -111,16 +129,7 @@ static UIFont *lastTextFont = nil;
 
 - (void)didTransitionToState:(UITableViewCellStateMask)state {
 	//NSLog(@"Transitioned to state: %d", state);
-	if (state == 3) {
-		CGRect b = [self bounds];
-		b.size.width -= 30;
-		[contentView setFrame:b];
-		[super layoutSubviews];
-		deleteSelected = YES;
-	}
-	else {
-		deleteSelected = NO;
-	}
+	
 	[super didTransitionToState:state];
 }
 
