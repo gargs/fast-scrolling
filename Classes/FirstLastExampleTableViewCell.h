@@ -13,6 +13,8 @@
 {
 	NSString *firstText;
 	NSString *lastText;
+	
+	BOOL deleteSelected;
 }
 
 @property (nonatomic, copy) NSString *firstText;

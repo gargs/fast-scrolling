@@ -57,7 +57,12 @@ static UIFont *lastTextFont = nil;
 	CGRect b = [self bounds];
 	b.size.height -= 1; // leave room for the separator line
 	b.size.width += 30; // allow extra width to slide for editing
-	b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
+	//b.origin.x -= (self.editing && !self.showingDeleteConfirmation) ? 0 : 30; // start 30px left unless editing
+	b.origin.x -= (self.editing) ? 0 : 30; // start 30px left unless editing
+	if (deleteSelected == YES) {
+		b.size.width -= 30;
+	}
+	NSLog(@"b.origin: %f", b.origin.x);
 	[contentView setFrame:b];
     [super layoutSubviews];
 }
@@ -87,6 +92,36 @@ static UIFont *lastTextFont = nil;
 	
 	p.x += s.width + 6; // space between words
 	[lastText drawAtPoint:p withFont:lastTextFont];
+}
+
+- (void)willTransitionToState:(UITableViewCellStateMask)state {
+	//NSLog(@"Transitioning to state: %d", state);
+	if (state == 3) {
+		CGRect b = [self bounds];
+		b.size.width -= 30;
+		[contentView setFrame:b];
+		[super layoutSubviews];
+		deleteSelected = YES;
+	}
+	else {
+		deleteSelected = NO;
+	}
+	[super willTransitionToState:state];
+}
+
+- (void)didTransitionToState:(UITableViewCellStateMask)state {
+	//NSLog(@"Transitioned to state: %d", state);
+	if (state == 3) {
+		CGRect b = [self bounds];
+		b.size.width -= 30;
+		[contentView setFrame:b];
+		[super layoutSubviews];
+		deleteSelected = YES;
+	}
+	else {
+		deleteSelected = NO;
+	}
+	[super didTransitionToState:state];
 }
 
 @end
